@@ -16,13 +16,17 @@ const generateRefreshToken = (user) => {
   );
 };
 
+const verifyAccessToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET_ACCESS);
+};
 
-const verifyToken = (token) => {
-  return jwt.verify(token, process.env.JWT_SECRET);
+const verifyRefreshToken = (token) => {
+  return jwt.verify(token, process.env.JWT_SECRET_REFRESH);
 };
 
 module.exports = {
   generateAccessToken,
   generateRefreshToken,
-  verifyToken
+  verifyAccessToken,
+  verifyRefreshToken
 };
