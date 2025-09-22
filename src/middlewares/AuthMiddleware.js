@@ -1,5 +1,5 @@
 const User = require('../models/User');
-const { verifyToken } = require('../utils/generateToken');
+const { verifyAccessToken } = require('../utils/generateToken');
 
 const authenticateToken = async (req, res, next) => {
   try {
@@ -7,11 +7,11 @@ const authenticateToken = async (req, res, next) => {
     const token = authHeader && authHeader.split(' ')[1];
 
     if (!token) {
-      return res.status(401).json({ error: 'Access token required' });
+      return res.status(401).json({ error: 'A=ccess token needed' });
     }
 
-    const decoded = verifyToken(token);
-    const user = await User.findById(decoded.userId).select('-password');
+    const decoded = verifyAccessToken(token); //  verifyAccessToken
+    const user = await User.findById(decoded.id).select('-password'); 
     
     if (!user) {
       return res.status(401).json({ error: 'Invalid token' });
@@ -20,6 +20,7 @@ const authenticateToken = async (req, res, next) => {
     req.user = user;
     next();
   } catch (error) {
+    console.error('Token verification error:', error.message);
     return res.status(403).json({ error: 'Invalid or expired token' });
   }
 };
